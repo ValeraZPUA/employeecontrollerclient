@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.sass';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Employees from './pages/Employees/Employees';
+import Login from './pages/Login/Login';
+import NotFound from './pages/NotFound/NotFound';
+
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+        <Router>
+            <div className="APP-container">
+                <Switch>
+                    <Route path="/" exact component={Login} />
+                    <Route path="/employees/" component={Employees} />
+                    <Route component={NotFound} />
+                </Switch>
+            </div>
+        </Router>
     );
   }
 }
