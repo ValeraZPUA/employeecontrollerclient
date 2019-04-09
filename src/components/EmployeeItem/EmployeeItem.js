@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
 import styles from './EmployeeItem.module.sass';
-import Modal from 'react-modal';
-import axios from "axios";
-
-const customStyles = {
-    content : {
-        top                   : '50%',
-        left                  : '50%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%',
-        transform             : 'translate(-50%, -50%)'
-    }
-};
+import axios from 'axios';
+import ModalWindowEdit from "../ModalWindowEdit/ModalWindowEdit";
+import ModalWindowDelete from "../ModalWindowDelete/ModalWindowDelete";
 
 class EmployeeItem extends Component {
 
@@ -23,50 +13,31 @@ class EmployeeItem extends Component {
             fieldNameForEdit: '',
             valueForEdit: '',
             id: '',
-            data: {}
+            phoneNumber: this.props.phoneNumber,
+            salary: this.props.salary,
+            position: this.props.position,
+            addDate: this.props.addDate
         };
-
-        this.openModal = this.openModal.bind(this);
-        this.afterOpenModal = this.afterOpenModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
     }
 
-    openModal() {
-        this.setState({
-            modalIsOpen: true
-        });
-    }
+    delData = (field, value, id) => {
+      // this.setState({
+      //     fieldNameForEdit: field,
+      //     valueForEdit: '',
+      //     id: id
+      // });
 
-    afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        this.subtitle.style.color = '#f00';
-    }
-
-    closeModal() {
-        this.setState({
-            modalIsOpen: false,
-        });
-    }
-
-
-    takeData = (field, value, id) => {
-        this.setState({
-            fieldNameForEdit: field,
-            valueForEdit: value,
-            id: id,
-        });
-        this.openModal();
+        this.update(field, value, id);
     };
 
-    update = () => {
-        const data = {[this.state.fieldNameForEdit]:this.state.valueForEdit};
-        axios.put('http://localhost:3010/api/employee/' + this.state.id, data)
+    update = (field, value, id) => {
+        console.log(field, value, id);
+        const newData = {[field]:value};
+        axios.put('http://localhost:3010/api/employee/' + id, newData)
             .then(({data}) => {
-                /*
-                TODO
-                 */
-                //this.props.myHandler(data);
-                console.log(data);
+                this.setState({
+                    [field]: value
+                });
             })
             .catch((error) => {
                 /*
@@ -74,20 +45,11 @@ class EmployeeItem extends Component {
                  */
                 console.log(error);
             });
-
-        this.closeModal();
-    };
-
-
-    inputHandler = (e) => {
-      this.setState({
-          valueForEdit: e.target.value
-      })
     };
 
     render() {
         return (
-            <div>
+            <div className={styles.main}>
                 <div  className={styles.container}>
                     <div className={styles.fullName}>
                         <span>Name: {this.props.fullName}</span>
@@ -95,45 +57,42 @@ class EmployeeItem extends Component {
                     </div>
 
                     <div className={styles.information}>
-                        <span>Phone Number: {this.props.phoneNumber}</span>
-                        <span>Salary: {this.props.salary}</span>
-                        <span>Position: {this.props.position}</span>
-                        <span>Added: {this.props.addDate}</span>
+                        <span>Phone Number: {this.state.phoneNumber}</span>
+                        <span>Salary: {this.state.salary}</span>
+                        <span>Position: {this.state.position}</span>
+                        <span>Added: {this.state.addDate}</span>
                     </div>
 
-                    <div className={styles.btns}>
-                        <div onClick={() => this.takeData('phoneNumber', this.props.phoneNumber, this.props.id)}></div>
-                        <div onClick={() => this.takeData('salary', this.props.salary, this.props.id)}></div>
-                        <div onClick={() => this.takeData('position', this.props.position, this.props.id)}></div>
-                        <div onClick={() => this.takeData('addDate', this.props.addDate, this.props.id)}></div>
+                    <div className={styles.editBtns}>
+                        <ModalWindowEdit myHandler={this.update}
+                                         fieldNameForEdit="phoneNumber"
+                                         valueForEdit={this.state.phoneNumber}
+                                         id={this.props.id}/>
+                        <ModalWindowEdit myHandler={this.update}
+                                         fieldNameForEdit="salary"
+                                         valueForEdit={this.state.salary}
+                                         id={this.props.id}/>
+                        <ModalWindowEdit myHandler={this.update}
+                                         fieldNameForEdit="position"
+                                         valueForEdit={this.state.position}
+                                         id={this.props.id}/>
+                        <ModalWindowEdit myHandler={this.update}
+                                         fieldNameForEdit="addDate"
+                                         valueForEdit={this.state.addDate}
+                                         id={this.props.id}/>
                     </div>
-                </div>
 
-                <div>
-                    <Modal
-                        isOpen={this.state.modalIsOpen}
-                        onAfterOpen={this.afterOpenModal}
-                        onRequestClose={this.closeModal}
-                        style={customStyles}
-                        contentLabel="Example Modal">
-
-                        <h2 ref={subtitle => this.subtitle = subtitle}>Edit</h2>
-                        <div className={styles.editFiled}>
-                            <span>{this.state.fieldNameForEdit}: </span>
-                            <input onChange={this.inputHandler} defaultValue={this.state.valueForEdit}/>
-                        </div>
-
-                        <div onClick={() => this.props.myHandler(this.state.fieldNameForEdit, this.state.valueForEdit, this.state.id)}>
-                        {/*<div>*/}
-                            <button onClick={this.update}>OK</button>
-                            <button onClick={this.closeModal}>Cancel</button>
-                        </div>
-                    </Modal>
+                    <div className={styles.deleteBtns}>
+                        <ModalWindowDelete myHandler={this.update}
+                                         fieldNameForEdit="phoneNumber"
+                                         id={this.props.id}/>
+                        {/*<div onClick={() => this.delData('phoneNumber', this.props.id)}> </div>*/}
+                        {/*<div onClick={() => this.delData('salary', this.props.id)}> </div>*/}
+                        {/*<div onClick={() => this.delData('position', this.props.id)}> </div>*/}
+                        {/*<div onClick={() => this.delData('addDate', this.props.id)}> </div>*/}
+                    </div>
                 </div>
             </div>
-
-
-
         )
     }
 }

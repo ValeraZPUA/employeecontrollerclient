@@ -3,7 +3,10 @@ import './Employess.sass';
 import axios from 'axios';
 import { PacmanLoader } from 'react-spinners';
 import EmployeeItem from '../../components/EmployeeItem/EmployeeItem'
+import Button from '../../components/Button/Button'
+import ModalWindowAddEmployee from '../../components/ModalWindowAddEmployee/ModalWindowAddEmployee'
 import update from 'immutability-helper';
+
 
 class Employees extends Component {
 
@@ -28,18 +31,10 @@ class Employees extends Component {
     }
 
     handler = (field, value, id) => {
-        console.log('param', field, value, id);
         const index = this.state.employees.findIndex(empl => empl._id ===id);
         this.setState({
             employees: update(this.state.employees, {[index]: {[field]: {$set: [value]}}})
         })
-
-
-
-
-        //const index = this.state.employees.findIndex(function(x) { return x._id==id });
-
-        console.log(index);
     };
 
     renderEmployees() {
@@ -63,35 +58,54 @@ class Employees extends Component {
                     this.renderLoader()
                     :
                     this.renderEmployees()}
-
-                {/*<button onClick={this.click}>btn</button>*/}
+                <div className="btns">
+                    <Button name="previous"
+                            onClick={this.componentDidMount}/>
+                    <Button name="next"
+                            onClick={this.componentDidMount}/>
+                </div>
+                <div className="btns">
+                    <ModalWindowAddEmployee myHandler={this.addEmployee}/>
+                </div>
             </div>
         )
     }
 
-    // click = () => {
-    //     this.setState({
-    //         employees: update(this.state.employees, {0: {salary: {$set: 'updated field name'}}})
-    //     })
-    //   //   this.state.employees[0].salary ++;
-    //   //   this.forceUpdate()
-    // };
+    addEmployee = (fullName, gender, phoneNumber, salary, position) => {
+        const data = {fullName: fullName,
+            gender: gender,
+            phoneNumber: phoneNumber,
+            salary: salary,
+            position: position};
+        axios.post('http://localhost:3010/api/employee/', data)
+            .then(({data}) => {
+                const newElement = {_id: data._id,
+                    fullName: data.fullName,
+                    gender: data.gender,
+                    phoneNumber: data.phoneNumber,
+                    salary: data.salary,
+                    position: data.position,
+                    addDate: data.addDate};
+                if (this.state.employees.length<2) {
+                    this.setState(prevState => ({
+                        employees: [...prevState.employees, newElement]
+                    }))
+                }
+            })
+            .catch((error) => {
+                this.setState({isFetching: false, error});
+            });
+    };
 
-    componentDidMount() {
+    componentDidMount = (step) => {
         this.setState({isFetching: true});
-            //if (this.state.employees.length !== 0) {
-        /*
-        TODO plus
-         */
-                axios.post('http://localhost:3010/api/employee/step', {step: "plus"})
-                    .then(({data}) => {
-                        this.setState({isFetching: false, employees: data})
-                    })
-                    .catch((error) => {
-                        this.setState({isFetching: false, error});
-                    });
-            //}
-
+            axios.post('http://localhost:3010/api/employee/step', {step: step})
+                .then(({data}) => {
+                    this.setState({isFetching: false, employees: data})
+                })
+                .catch((error) => {
+                    this.setState({isFetching: false, error});
+                });
     }
 }
 

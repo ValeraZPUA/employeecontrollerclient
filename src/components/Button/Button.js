@@ -9,9 +9,9 @@ class Button extends Component {
 
     render() {
         return (
-            <div className={styles["Button-container"]}>
+            <div className={styles.Button_container}>
                 <button className={styles.btn}
-                onClick={() => this.props.onClick()}>{this.props.name}</button>
+                onClick={() => this.props.onClick(this.props.name)}>{this.props.name}</button>
             </div>
         )
     }
