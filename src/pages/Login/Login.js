@@ -3,6 +3,7 @@ import './Login.sass';
 import Button from '../../components/Button/Button'
 import TextFiled from '../../components/TextField/TextFiled'
 import axios from 'axios';
+import ModalWindowRegUser from '../../components/ModalWindowRegUser/ModalWindowRegUser'
 
 class Login extends Component {
 
@@ -15,31 +16,28 @@ class Login extends Component {
     }
 
     loginBtn = () => {
-        console.log(this.state);
-        const data = [{email: this.state.email}, {password: this.state.password}];
-        //const data = [this.state.login, this.state.password];
-        console.log(data);
         axios.post('http://localhost:3010/api/login', this.state )
             .then(({data}) => {
-                /*
-                TODO
-                 */
-                console.log(data);
+                if(data)
+                    this.props.history.push('employees/');
             })
             .catch((error) => {
-                /*
-                TODO
-                 */
-                console.log(error);
+                if(error)
+                    console.log('ERROR', error)
             });
-        this.props.history.push('employees/');
 
     };
 
-
-
-    registnrationBtn() {
-
+    registrationBtn = (login, email, password) => {
+        const newUserData = {login: login, email: email, password: password};
+        axios.post('http://localhost:3010/api/user', newUserData)
+            .then(({data}) => {
+                if(data)
+                    this.props.history.push('employees/');
+            })
+            .catch((error) => {
+                console.log('ERROR',error);
+            });
     }
 
     changeEmail = (e) => {
@@ -54,12 +52,6 @@ class Login extends Component {
         })
     };
 
-
-    onSubmit = () => {
-        console.log(this.state)
-    };
-
-
     render() {
         return (
             <div className="Login-container">
@@ -69,18 +61,15 @@ class Login extends Component {
                                value={this.state.email}
                                onChange={this.changeEmail}/>
                     <TextFiled name="Password"
-                               type="text"
+                               type="password"
                                value={this.state.password}
                                onChange={this.changePassword}/>
                 </div>
                 <div className="btn">
                     <Button name="Login"
                             onClick={this.loginBtn}/>
-                    <Button name="Registration"
-                            myHandler={this.registnrationBtn}/>
+                    <ModalWindowRegUser myHandler={this.registrationBtn}/>
                 </div>
-
-
             </div>
         )
     }

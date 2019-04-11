@@ -63,34 +63,42 @@ class EmployeeItem extends Component {
                         <span>Added: {this.state.addDate}</span>
                     </div>
 
-                    <div className={styles.editBtns}>
-                        <ModalWindowEdit myHandler={this.update}
-                                         fieldNameForEdit="phoneNumber"
-                                         valueForEdit={this.state.phoneNumber}
-                                         id={this.props.id}/>
-                        <ModalWindowEdit myHandler={this.update}
-                                         fieldNameForEdit="salary"
-                                         valueForEdit={this.state.salary}
-                                         id={this.props.id}/>
-                        <ModalWindowEdit myHandler={this.update}
-                                         fieldNameForEdit="position"
-                                         valueForEdit={this.state.position}
-                                         id={this.props.id}/>
-                        <ModalWindowEdit myHandler={this.update}
-                                         fieldNameForEdit="addDate"
-                                         valueForEdit={this.state.addDate}
-                                         id={this.props.id}/>
+                    <div className={styles.imgBtns}>
+                        <div className={styles.editBtns}>
+                            <ModalWindowEdit myHandler={this.update}
+                                             fieldNameForEdit="phoneNumber"
+                                             valueForEdit={this.state.phoneNumber}
+                                             id={this.props.id}/>
+                            <ModalWindowEdit myHandler={this.update}
+                                             fieldNameForEdit="salary"
+                                             valueForEdit={this.state.salary}
+                                             id={this.props.id}/>
+                            <ModalWindowEdit myHandler={this.update}
+                                             fieldNameForEdit="position"
+                                             valueForEdit={this.state.position}
+                                             id={this.props.id}/>
+                            <ModalWindowEdit myHandler={this.update}
+                                             fieldNameForEdit="addDate"
+                                             valueForEdit={this.state.addDate}
+                                             id={this.props.id}/>
+                        </div>
+
+                        <div className={styles.deleteBtns}>
+                            <ModalWindowDelete myHandler={this.update}
+                                               fieldNameForEdit="phoneNumber"
+                                               id={this.props.id}/>
+                            <ModalWindowDelete myHandler={this.update}
+                                               fieldNameForEdit="salary"
+                                               id={this.props.id}/>
+                            <ModalWindowDelete myHandler={this.update}
+                                               fieldNameForEdit="position"
+                                               id={this.props.id}/>
+                            <ModalWindowDelete myHandler={this.update}
+                                               fieldNameForEdit="addDate"
+                                               id={this.props.id}/>
+                        </div>
                     </div>
 
-                    <div className={styles.deleteBtns}>
-                        <ModalWindowDelete myHandler={this.update}
-                                         fieldNameForEdit="phoneNumber"
-                                         id={this.props.id}/>
-                        {/*<div onClick={() => this.delData('phoneNumber', this.props.id)}> </div>*/}
-                        {/*<div onClick={() => this.delData('salary', this.props.id)}> </div>*/}
-                        {/*<div onClick={() => this.delData('position', this.props.id)}> </div>*/}
-                        {/*<div onClick={() => this.delData('addDate', this.props.id)}> </div>*/}
-                    </div>
                 </div>
             </div>
         )

@@ -1,6 +1,7 @@
 .main
   .container
     display: flex
+    justify-content: space-between
     border-bottom: black solid 1px
     margin-bottom: 5px
     .fullName
@@ -10,29 +11,26 @@
       margin-right: 10px
     .information
       display: flex
+      width: 250px
       flex-direction: column
       span
         margin-bottom: 5px
-    .editBtns
-      div
-        margin-left: 5px
-        margin-bottom: 5px
-        width: 18px
-        height: 18px
-        //background-image: url("../../imgs/box_edit-512.png")
-        //background-repeat: no-repeat
-        //background-size: 18px 18px
-        cursor: pointer
-    .deleteBtns
-      div
-        margin-left: 5px
-        margin-bottom: 5px
-        width: 18px
-        height: 18px
-        //background-image: url("../../imgs/trash.png")
-        //background-repeat: no-repeat
-        //background-size: 18px 18px
-        cursor: pointer
+    .imgBtns
+      display: flex
+      .editBtns
+        div
+          margin-left: 5px
+          margin-bottom: 5px
+          width: 18px
+          height: 18px
+          cursor: pointer
+      .deleteBtns
+        div
+          margin-left: 5px
+          margin-bottom: 5px
+          width: 18px
+          height: 18px
+          cursor: pointer
 
 .modal
   .b
